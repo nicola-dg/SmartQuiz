@@ -1,0 +1,27 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@sequelize/core": "^7.0.0-alpha.37",
+    "@types/jsonwebtoken": "^9.0.6",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "sequelize": "^6.37.3",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.7.4",
+    "@types/sequelize": "^4.28.20",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  },
+  "scripts": {
+    "start": "tsc && node dist/index.js",
+    "dev": "nodemon -w src --ext ts --exec \"npm run compile\""
+  }
+}

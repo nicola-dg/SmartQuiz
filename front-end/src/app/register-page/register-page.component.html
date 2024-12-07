@@ -1,0 +1,99 @@
+
+
+  <section class="bg-3ary-color bg-opacity-50 dark:bg-dark-6-ary-color min-h-screen flex">
+    <div class="flex flex-col items-center justify-center px-6 w-full">
+      <a href="#" class="mb-6 text-3xl font-semibold text-primary-color dark:text-dark-primary-color">
+        Smart Quiz
+      </a>
+      <div class="w-full bg-5ary-color bg-opacity-50 rounded-lg shadow dark:border sm:max-w-md dark:bg-dark-5ary-color dark:border-gray-700">
+        <div class="p-4 sm:p-6">
+          <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 mb-4 dark:text-dark-primary-color">
+            Create an account
+          </h1>
+          <form class="space-y-3 flex flex-col items-center" (ngSubmit)="onSubmit(signupForm)" #signupForm="ngForm">
+            <div class="space-y-1 w-full">
+              <label for="name" class="block text-sm font-medium text-gray-900 dark:text-dark-primary-color">Username</label>
+              <input 
+                [(ngModel)]="username"
+                type="text"
+                name="name"
+                id="name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-dark-secondary-color dark:placeholder-dark-3ary-color  dark:border-gray-600  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="write your username here"
+                required
+                minlength="6"
+                #usernameField="ngModel"
+                [ngClass]="{'border-error-color dark:border-error-color': usernameField.invalid && (usernameField.touched || usernameField.dirty || signupForm.submitted)}"
+              >
+              <div class="text-red-700 text-xs mt-1" *ngIf="usernameField.invalid && (usernameField.touched || usernameField.dirty)">
+                <div *ngIf="usernameField.hasError('required')">Name is required.</div>
+                <div *ngIf="usernameField.hasError('minlength')">Name must be at least 6 characters long.</div>
+              </div>
+            </div>
+  
+            <div class="space-y-1 w-full">
+              <label for="email" class="block text-sm font-medium text-gray-900 dark:text-white">Email</label>
+              <input
+                [(ngModel)]="email"
+                type="email"
+                name="email"
+                id="email"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-dark-secondary-color dark:placeholder-dark-3ary-color dark:border-gray-600  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="name@company.com"
+                required
+                email
+                #emailField="ngModel"
+                [ngClass]="{'border-error-color dark:border-error-color': emailField.invalid && (emailField.touched || emailField.dirty || signupForm.submitted)}"
+              >
+              <div class="text-red-700 text-xs mt-1" *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)">
+                <div *ngIf="emailField.hasError('required')">Email is required.</div>
+                <div *ngIf="emailField.hasError('email')">Email has an invalid format.</div>
+              </div>
+            </div>
+  
+            <div class="space-y-1 w-full">
+              <label for="password" class="block text-sm font-medium text-gray-900 dark:text-white">Password</label>
+              <div class="relative">
+                <input
+                  [(ngModel)]="password"
+                  [type]="showPassword ? 'text' : 'password' "
+                  name="password"
+                  id="password"
+                  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-dark-secondary-color dark:placeholder-dark-3ary-color dark:border-gray-600  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Enter your password"
+                  required
+                  minlength="8"
+                  pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}"
+                  #passwordField="ngModel"
+                  [ngClass]="{'border-error-color dark:border-error-color': passwordField.invalid && (passwordField.touched || passwordField.dirty || signupForm.submitted)}"
+                >
+                <button class="dark:text-dark-3ary-color absolute right-2 top-2" (click)="toggleShowPassword()" type="button">
+                  <i class="fa-regular fa-eye"></i>
+                </button>
+              </div>
+              <div class="text-red-700 text-xs mt-1" *ngIf="passwordField.invalid && (passwordField.dirty || passwordField.touched)">
+                <div *ngIf="passwordField.hasError('required')">Password is required.</div>
+                <div *ngIf="passwordField.hasError('minlength')">Password must be at least 8 characters long.</div>
+                <div *ngIf="passwordField.hasError('pattern')">Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.</div>
+              </div>
+            </div>
+  
+            <app-button [data]="'Create an account'" [submit]="true">Create an account</app-button>
+  
+            <div *ngIf="signupForm.invalid && signupForm.submitted" class="text-red-700 text-xs text-center">
+              Please fill out the form with correct information before submitting.
+            </div>
+
+            <div *ngIf="accountAlreadyExists()" class="text-red-700 text-xs text-center">Account Already exists please choose other credentials.</div>
+  
+            <p class="text-xs text-secondary-color dark:text-gray-400 text-center">
+              Already have an account? 
+              <a [routerLink]="['/login']" class="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                Login here
+              </a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>

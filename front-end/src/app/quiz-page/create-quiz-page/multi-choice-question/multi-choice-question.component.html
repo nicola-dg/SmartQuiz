@@ -1,0 +1,129 @@
+
+<div tabindex="-1" class="flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50  w-full md:inset-0 h-[calc(100%-1rem)] max-h-full" [class.hidden]="!showModal" *ngIf="questionCopy">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative  rounded-lg shadow dark:bg-dark-5ary-color bg-4ary-color dark:text-dark-primary-color">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:bg-dark-5ary-color bg-4ary-color ">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Modify Question
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" (click)="toggleVisibility()" (click)="resetForm(updateQuestionForm)">
+                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4  dark:bg-dark-5ary-color bg-4ary-color">
+                <form #updateQuestionForm="ngForm" (ngSubmit)="emitUpdateToParent(updateQuestionForm)">
+                    <label for="question">Question:</label>
+                    <input id="question" name="question" type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                     required="true" placeholder="Enter a new question." [(ngModel)]="questionCopy.question" #questionInput="ngModel"  [ngClass]="{'ring-2 ring-red-400' : questionInput.invalid && (questionInput.dirty || questionInput.touched || updateQuestionForm.submitted)}">
+                    
+                    <ul>
+                        <label for="answers">Answers:</label>
+                        <li *ngFor="let answer of questionCopy.MultiChoiceAnswers; let i = index" class="flex items-center" id="answers">
+                            <input type="text" 
+                            [(ngModel)]="questionCopy.MultiChoiceAnswers[i].answer" 
+                            placeholder="Answer {{ i + 1 }}" 
+                            name="ans{{i}}" 
+                            [ngClass]="{'ring-red-500 ring-1' : !hasMinimumValidAnswers() && updateQuestionForm.submitted}"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            >
+                            <input type="radio" 
+                            name="correctAnswer"
+                            [value]="true"
+                            [checked]="answer.isCorrect"
+                            (change)="setCorrectAnswer(answer)"
+                            [ngClass]="{'ring-red-500 ring-1' : !hasCorrectAnswerSelected() && updateQuestionForm.submitted}"
+                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            >
+                        </li>
+                    </ul>
+                    
+                    
+                    <button type="button" (click)="addAnswerField()" [disabled]="isMaxAnswerReached()">+ Add Answer</button>
+                    <div *ngIf="isMaxAnswerReached()" class="text-orange-500">each question can have a maximum of 4 answers</div>
+                    <div *ngIf="updateQuestionForm.invalid && updateQuestionForm.submitted" class="text-red-500">please fill out the form with correct informations before submitting.</div>
+                    <div *ngIf="!hasMinimumValidAnswers() && updateQuestionForm.submitted" class="text-red-500">each question must have at least 2 answers.</div>
+                    <div *ngIf="!hasCorrectAnswerSelected() && updateQuestionForm.submitted" class="text-red-500">select a valid correct answer.</div>
+
+
+                    <div class="flex items-center justify-center border-t py-5 border-gray-200 rounded-b dark:border-gray-600 gap-3">
+                        <app-button [submit]="true" data="Update">Update</app-button>
+                        <app-button (click)="toggleVisibility()" (click)="resetForm(updateQuestionForm)" data="Decline" bgColor="secondary">Decline</app-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<div tabindex="-1" class="flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 w-full md:inset-0 h-[calc(100%-1rem)] max-h-full dark:text-dark-primary-color" [class.hidden]="!showModal" *ngIf="!question">
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative  rounded-lg shadow dark:bg-dark-5ary-color bg-4ary-color">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:bg-dark-5ary-color bg-4ary-color">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    New Question
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" (click)="toggleVisibility()" (click)="resetForm(createQuestionForm)">
+                    <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-4 md:p-5 space-y-4  dark:bg-dark-5ary-color bg-4ary-color">
+                <form #createQuestionForm="ngForm" (ngSubmit)="emitToParent(createQuestionForm)">
+                    <label for="question2">Question:</label>
+                    <input id="question2" name="question" type="text"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required="true" placeholder="Enter a new question." [(ngModel)]="newQuestion.question" #questionInput="ngModel"  [ngClass]="{'ring-2 ring-red-400' : questionInput.invalid && (questionInput.dirty || questionInput.touched || createQuestionForm.submitted)}">
+                    
+                    <label for="answers">Answers:</label>
+                    <ul id="answers">
+                        <li *ngFor="let answer of newQuestion.MultiChoiceAnswers; let i = index" class="flex items-center gap-2">
+                            <input type="text" 
+                            [(ngModel)]="newQuestion.MultiChoiceAnswers[i].answer" 
+                            placeholder="Answer {{ i + 1 }}" 
+                            [attr.name]="'answer' + i"
+                            [name]="'answer' + i"
+                            [ngClass]="{'ring-red-500 ring-1' : !hasMinimumValidAnswers() && createQuestionForm.submitted}"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <input type="radio" 
+                            name="correctAnswer"
+                            [value]="true"
+                            (change)="setCorrectAnswer(answer)"
+                            [ngClass]="{'ring-red-500 ring-1' : !hasCorrectAnswerSelected() && createQuestionForm.submitted}"
+                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            >
+                        </li>
+                    </ul>
+                    
+                    
+                    <button type="button" (click)="addAnswerField()" [disabled]="isMaxAnswerReached()" class="hover:dark:text-dark-6-ary-color pt-2">+ Add Answer</button>
+                    <div *ngIf="isMaxAnswerReached()" class="text-orange-300">each question can have a maximum of 4 answers</div>
+                    <div *ngIf="createQuestionForm.invalid && createQuestionForm.submitted" class="text-red-500">please fill out the form with correct informations before submitting.</div>
+                    <div *ngIf="!hasMinimumValidAnswers() && createQuestionForm.submitted" class="text-red-500">each question must have at least 2 answers.</div>
+                    <div *ngIf="!hasCorrectAnswerSelected() && createQuestionForm.submitted" class="text-red-500">select a valid correct answer.</div>
+
+
+                    <div class="flex items-center justify-center border-t py-5 border-gray-200 rounded-b dark:border-gray-600 gap-3">
+                        <app-button [submit]="true" [data]="'Create'"></app-button>
+                        <app-button (click)="toggleVisibility()" (click)="resetForm(createQuestionForm)" bgColor="secondary" data="Decline"></app-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

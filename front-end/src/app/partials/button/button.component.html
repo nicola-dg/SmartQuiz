@@ -1,0 +1,17 @@
+<button
+  class="rounded-md 
+         px-3.5 py-2 text-sm font-semibold text-primary-color
+         hover:bg-3ary-color hover:text-6-ary-color   dark:hover:text-dark-primary-color dark:text-dark-5ary-color 
+         shadow-sm block w-full h-full"
+  [ngClass]="{
+    'bg-white': bgColor === 'primary',
+    'bg-4ary-color': bgColor === 'secondary',
+    'dark:bg-dark-primary-color': bgColor === 'primary',
+    'dark:bg-dark-secondary-color': bgColor === 'secondary',
+    'dark:hover:bg-dark-4ary-color' : bgColor === 'primary',
+    'dark:hover:bg-dark-3ary-color' : bgColor === 'secondary'
+  }"
+  [type]="submit ? 'submit' : 'button'"
+  [disabled]="disabled">
+  {{ data }}
+</button>

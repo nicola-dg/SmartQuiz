@@ -1,0 +1,18 @@
+<nav class="bg-primary-color text-6-ary-color dark:text-dark-primary-color dark:bg-black flex items-center flex-grow h-20 justify-between px-2 md:px-10 min-w-full fixed top-0 z-50">
+    <div class="text-logo-color text-3xl font-semibold tracking-tight text-center" routerLink="/dash">
+        Smart Quiz
+    </div>
+    <div class="flex gap-5 relative" *ngIf="!isAuthPage()">
+        <div  class=" dark:text-white">
+            <a routerLink="/dash"><i class="fa-solid fa-house"></i></a>
+        </div>
+        <div  class="home-icon dark:text-white">
+            <a routerLink="/profile"><i class="fa-solid fa-user" alt="profile"></i></a>
+        </div>
+        <div (click)="onClickLogOut()">
+            <a href="" class="dark:text-white"><i class="fa-solid fa-right-from-bracket"></i></a>
+        </div>
+    </div>
+    
+    
+</nav>

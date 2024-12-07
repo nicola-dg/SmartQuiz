@@ -1,0 +1,99 @@
+<div class="flex flex-col flex-grow min-h-full w-full bg-6-ary-color dark:bg-dark-5ary-color dark:text-dark-primary-color min-w-fit " *ngIf="quiz">
+    <app-navbar></app-navbar>
+
+    <div class="dark:bg-dark-5ary-color m-5 rounded md:px-5 flex flex-col flex-grow min-w-fit mt-20">
+        <!-- header -->
+         <div class="flex flex-col md:flex-row md:justify-between border-b border-b-gray-200 pr-10 pl-2 py-5 md:items-center">
+            <h1 class="text-3xl dark:text-dark-primary-color font-bold tracking-tighter">{{quiz.title}}</h1>
+            <span class="dark:text-gray-400 ">{{"created by: " + creator}}</span>
+         </div>
+        
+        
+         <!-- questions -->
+        <div *ngIf="quiz" class="flex flex-col flex-grow">
+        
+            <form (ngSubmit)="onSubmit(responseForm)" #responseForm="ngForm" class="flex flex-col">
+                <ul *ngFor="let quest of quiz.MultiChoiceQuestions; let i = index">
+                    <li class="flex flex-col gap-3 p-4 dark:bg-dark-4ary-color shadow-md first:mt-3 rounded"> 
+                        <div>
+                            <strong>{{ quest.question }}</strong>
+                        </div>
+                        <ul *ngFor="let answer of quest.MultiChoiceAnswers" class="flex gap-4 ml-2">
+                            <input type="radio" name="selectedAnswer{{i}}" [(ngModel)]="response.selectedMultiChoiceAnswers[i]" [value]="answer" required="true">
+                            <li>{{ answer.answer }}</li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul *ngFor="let openQuest of quiz.OpenEndedQuestions; let i = index">
+                    <li class="dark:bg-dark-4ary-color flex flex-col gap-2 p-4 shadow-md last:mb-3 first:mt-3 rounded">
+                        <div>
+                            <strong>{{ openQuest.question }}</strong>
+                        </div>
+                        <ul>
+                            <div class="flex md:w-1/3 gap-4 ml-2">
+                                <input class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2 dark:bg-dark-secondary-color dark:placeholder-dark-3ary-color dark:border-gray-600  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                type="text" [(ngModel)]="response.selectedOpenEndedAnswers[i].answer" placeholder="write answer here" name="selectedOpenAnswer{{i}}" required="true">
+                            </div>
+                        </ul>
+                    </li>
+                </ul>
+                <div *ngIf="responseForm.invalid && responseForm.submitted " class="text-error-color">Please answer all questions before submitting.</div>
+                <div *ngIf="responseForm.invalid && chooseNameError" class="text-error-color">{{chooseNameError}}</div>
+                <div class="flex items-center self-end">
+                    <app-button [data]="'Send response as ' + buttonUsername" [submit]="true" class="h-28 w-64 p-5" bgColor="secondary"  ></app-button>
+                    <div *ngIf="!authService.isUserAuthenticated()" class="flex items-center">
+                        <span class="dark:text-dark-primary-color">or</span>
+                        <div (click)="chooseNameClicked()" class="flex">
+                            <app-button data="Choose name" class="h-28 w-64 p-5"></app-button> 
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+    </div>
+
+
+    <!-- Overlay -->
+    <div 
+    class="fixed inset-0 bg-black bg-opacity-50 z-40" 
+    *ngIf="showChooseNameModal">
+    </div>
+
+
+    <!-- Main modal -->
+    <div tabindex="-1" class="flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50  w-full md:inset-0 h-[calc(100%-1rem)] max-h-full " *ngIf="showChooseNameModal">
+        <div class="relative p-4 w-full max-w-2xl max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-6-ary-color flex flex-col rounded-lg shadow dark:bg-dark-5ary-color dark:text-dark-primary-color z-50">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:bg-dark-5ary-color">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                        Enter username or keep anonimate
+                    </h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" (click)="toggleChooseNameModal()">
+                        <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="md:p-5 space-y-4 flex flex-col flex-grow w-full dark:bg-dark-5ary-color">
+                        
+                           <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" [(ngModel)]="username" name="quizURL" maxlength="15" placeholder="Enter username" >
+
+                           <div *ngIf="usernameError" class="text-red-700 text-sm text-center">{{usernameError}}</div>
+                           
+                           <div class="flex items-center justify-center border-t py-5 border-gray-200 rounded-b dark:border-gray-600 gap-3">
+                               <div (click)="saveNameClicked()">
+                                <app-button data="send"></app-button>
+                               </div>
+                               <div (click)="stayAnonymousClicked()">
+                                <app-button data="Send As Anonymous" bgColor="secondary"></app-button>
+                               </div>
+                           </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

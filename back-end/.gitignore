@@ -1,0 +1,7 @@
+# Ignora dipendenze
+node_modules/
+httpRequests/
+
+# Ignora file temporanei
+*.tmp
+*.bak
