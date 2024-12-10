@@ -1,0 +1,16 @@
+<div class="grid-cols-1 h-full bg-6-ary-color dark:bg-dark-6-ary-color">
+    <div class="flex justify-between items-center px-10 h-1/6">
+        <div class="text-3xl font-bold font-serif dark:text-dark-primary-color">SQ</div>
+        <div class="text-xl hover:cursor-pointer hover:text-secondary-color dark:hover:text-dark-3ary-color dark:text-dark-primary-color font-semibold" routerLink="/login">Log In</div>
+    </div>
+
+    <div class="flex flex-col items-center justify-center h-3/5 bg-3ary-color bg-opacity-50 dark:bg-dark-5ary-color">        
+        <div class="text-balance text-5xl font-semibold tracking-tight text-primary-color dark:text-dark-primary-color h-">Welcome to Smart Quiz</div>
+        <div class="pt-2 text-pretty text-lg font-medium text-secondary-color dark:text-dark-secondary-color sm:text-xl/8">Create and partecipate amazing quiz</div>
+        <div class="flex gap-3 items-center pt-1">
+            <app-button  [routerLink]="['/register']" [data]="'Register'"></app-button>
+            <p class="dark:text-dark-primary-color">or</p>
+            <app-button [routerLink]="['/login']" [data]="'Log In'" [bgColor]="'secondary'"></app-button>
+        </div>
+    </div>
+</div>

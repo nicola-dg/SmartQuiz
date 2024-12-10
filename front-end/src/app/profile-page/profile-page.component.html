@@ -1,0 +1,17 @@
+<div class="flex min-h-full dark:text-dark-primary-color bg-6-ary-color">
+    <app-navbar></app-navbar>
+    <div class="flex-col flex-grow mt-20 dark:bg-dark-6-ary-color min-h-full p-10">
+        <h1 class="text-6xl font-semibold tracking-tighter block">Welcome {{username?.toUpperCase()}}</h1>
+        <h3 class=" border-b border-b-gray-200 my-5 pl-2">Your Quizzes:</h3>
+        <div class="flex max-w-full gap-4 flex-wrap items-center justify-center md:justify-start">
+            <app-mc-quiz-card *ngFor="let quiz of quizzes" [quiz]="quiz" ></app-mc-quiz-card>
+        </div>
+        
+        <div *ngIf="quizzes.length == 0" class="flex flex-col flex-grow gap-3">
+            <h3>You have created 0 quiz</h3>
+            <div class="self-start pl-3 h-28 w-64 p-5" routerLink="/quiz">
+                <app-button data="Create Quiz"></app-button>
+            </div>
+        </div>
+    </div>
+</div>

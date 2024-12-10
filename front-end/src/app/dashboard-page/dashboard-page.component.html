@@ -1,0 +1,108 @@
+ 
+<div class="flex min-h-full flex-grow w-full" [class.main-overlay]="showModal" >
+    <app-navbar></app-navbar>
+    <div class="flex flex-col w-full md:flex-row justify-center items-center bg-5ary-color bg-opacity-40 dark:bg-dark-6-ary-color mt-20">
+        <div class="block h-3/4 lg:w-1/2 p-3  relative">
+            <div class="flex flex-col h-full text-primary-color">
+                <div class="flex-grow bg-4ary-color bg-opacity-50 dark:bg-dark-5ary-color flex flex-col justify-between py-4 px-4 border-gray-950 dark:border-black border-solid border rounded min-w-fit">
+                    <div class=" dark:text-dark-primary-color font-semibold text-xl">
+                        My quizzes
+                        <p class="ml-3 font-thin text-base">
+                            view all your created quizzes
+                        </p>
+                    </div>
+                    <div class="self-end">
+                        <app-button [data]="'View'" class="block w-36"  routerLink="/profile">
+                            
+                        </app-button>
+                    </div>
+                </div>
+                <div class="flex-grow bg-3ary-color bg-opacity-40 dark:bg-dark-4ary-color flex flex-col justify-between py-4 px-4 border-gray-950 dark:border-black border-solid border rounded min-w-fit">
+                    <div class=" dark:text-dark-primary-color font-semibold text-xl">
+                        Create Quiz
+                        <p class="ml-3 font-thin text-base">
+                            create new quiz
+                        </p>
+                    </div>
+                    <div class="self-end">
+                        <app-button [data]="'Create'" class="block w-36"  [bgColor]="'secondary'" (click)="navigateToCreateQuiz()">
+                            
+                        </app-button>
+                    </div>
+                </div>
+                <div class="flex-grow bg-4ary-color bg-opacity-50 dark:bg-dark-5ary-color flex flex-col justify-between py-4 px-4 border-gray-950 dark:border-black border-solid border rounded min-w-fit">
+                    <div class=" dark:text-dark-primary-color font-semibold text-xl">
+                        Take Quiz
+                        <p class="ml-3 font-thin text-base">
+                            partecipate quiz created by other people
+                        </p>
+                    </div>
+                    <div class="self-end">
+                        <app-button [data]="'Take'" class="block w-36"  (click)="toggleModalVisibility()">
+                            
+                        </app-button>
+                    </div>
+                </div>
+            </div>
+
+            <div (click)="toggleNotifications()" class="cursor-pointer">
+                <div class="absolute top-1 right-1">
+                    <i class="fa-solid fa-bell dark:text-white text-primary-color"></i>
+                </div>
+                <div class="absolute top-0 right-3">
+                    <div class="bg-red-500 rounded-full block h-4 w-4 text-xs dark:text-dark-primary-color text-center">{{notifications.length}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="showNotifications" class="h-3/4 p-3 relative w-full md:w-1/2 rounded dark:bg-dark-6-ary-color bg-4ary-color">
+            <div *ngIf="notifications.length == 0; else elseBlock" class="w-full  dark:bg-dark-4ary-color h-full dark:text-dark-primary-color font-semibold tracking-wide" (click)="toggleNotifications()"><span class="dark:bg-dark-5ary-color border border-gray-400 w-full py-4 px-2 h-full text-center block">0 notifications</span></div>
+            <ng-template #elseBlock>
+                <ul 
+                class="block w-full dark:bg-dark-5ary-color h-full dark:text-dark-primary-color p-2">
+                    <app-notification *ngFor="let notification of notifications" (click)="navigateToOutcome(notification)" [notification]="notification"></app-notification>
+                </ul>
+            </ng-template>
+        </div>
+    </div>
+
+
+
+
+    <!-- Main modal -->
+    <div tabindex="-1" class="flex justify-center items-center overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50  w-full md:inset-0 h-[calc(100%-1rem)] max-h-full " [class.hidden]="!showModal">
+        <div class="relative p-4 w-full max-w-2xl max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white flex flex-col rounded-lg shadow bg-4ary-color dark:bg-dark-5ary-color dark:text-dark-primary-color z-50">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t bg-4ary-color dark:bg-dark-5ary-color">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                        Insert Quiz Url
+                    </h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" (click)="toggleModalVisibility()" (click)="resetForm(urlForm)">
+                        <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="md:p-5 space-y-4 flex justify-center flex-grow w-full bg-4ary-color dark:bg-dark-5ary-color">
+                    <form (ngSubmit)="navigateToQuizByUrl(urlForm)" #urlForm="ngForm" class="flex flex-grow flex-col">
+                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" [(ngModel)]="quizURL" name="quizURL" #quizURLInput="ngModel" required="true"  pattern="http://localhost:4200/quiz/.+/[1-9][0-9]*"   placeholder="http://localhost:4200/quiz/title/id">
+
+                        <!-- Error Message -->
+                        <div *ngIf="quizURLInput.errors?.['pattern'] && quizURLInput.touched" class="text-error-color">Please enter a valid URL.</div>
+
+                        <div class="flex items-center justify-center border-t py-5 border-gray-200 rounded-b dark:border-gray-600 gap-3">
+                            <app-button [submit]="true" data="Take quiz" (click)="toggleModalVisibility()"></app-button>
+                            <app-button (click)="toggleModalVisibility()" (click)="resetForm(urlForm)" data="Decline" bgColor="secondary"></app-button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  
+
+
+

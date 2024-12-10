@@ -1,0 +1,41 @@
+<div class="flex flex-col flex-grow min-h-full w-full pt-20 box-border bg-6-ary-color dark:bg-dark-6-ary-color dark:text-dark-primary-color relative" *ngIf="quiz">
+    <app-navbar></app-navbar>
+    <div class="flex p-5 flex-col gap-3 md:gap-0 md:flex-row ">
+        <!--colonna sinistra-->
+        <div class="flex flex-col max-h-max box-border items-center md:items-start md:w-72 md:max-w-72 bg-3ary-color  dark:bg-dark-5ary-color gap-3 p-5 rounded md:fixed ">
+            <div class="flex flex-col gap-3 min-w-full">
+                <h1 class="text-3xl font-semibold ">{{quiz.title}}</h1>
+                <div class="dark:bg-dark-4ary-color dark:bg-opacity-40 bg-opacity-40 bg-4ary-color flex flex-grow  min-w-full rounded whitespace-normal break-words p-3">
+                    <markdown [data]="quiz.description"></markdown>
+                </div>
+            </div>
+            <div class="md:self-end md:w-1/2" routerLink="/profile">
+                <app-button data="Hide details">hide details</app-button>
+            </div>
+        </div>
+        
+        <!--parte destra-->
+        <div class="flex-col box-border flex-grow md:pl-80 mr-2">
+            <h2 *ngIf="outcomes" class="text-3xl font-semibold border-b dark:border-b-dark-primary-color">Outcomes</h2>
+            <ul *ngFor="let outcome of outcomes; let i = index" class="flex-col gap-3 p-3">
+                <div class="flex flex-col md:flex-row md:justify-around  dark:bg-dark-5ary-color dark:hover:bg-dark-4ary-color bg-3ary-color bg-opacity-50 md:py-5 rounded md:px-3 p-2" (click)="toggleDetails(outcome)">
+                    <div class="flex gap-1 md:w-1/4 min-w-min md:justify-start">
+                        <span>username: </span>
+                        <li class="font-semibold">{{outcome.username}}</li>
+                    </div>
+                    <div class="flex md:w-1/4  gap-1 md:justify-center">
+                        <span>score: </span>
+                        <li class="font-semibold">{{outcome.score}}</li>
+                    </div>
+                    <li [ngClass]="{'text-red-700': !outcome.isPassed, 'text-green-700':outcome.isPassed}" class="font-semibold flex md:w-1/4 min-w-fit md:justify-center">{{(outcome.isPassed) ? "passed" : "not passed"}} </li>
+                    <div class=" md:w-1/4 md:min-w-fit self-end md:self-center text-center">
+                        <i class="fa-regular fa-eye relative bottom-2 right-4 md:static"></i>
+                    </div>
+                </div>
+                <app-view-outcome-details [id]="'outcome-' + outcome.id" [quiz]="quiz" [outcome]="outcome" [class.hidden]="!outcome.showDetails" (click)="deleteNotification(outcome)" (emitToggle)="onEmitToggle($event)"></app-view-outcome-details> 
+            </ul>
+            <div *ngIf="outcomes.length == 0">Nessun esito per questo quiz</div>
+        </div>
+    </div>
+</div>
+

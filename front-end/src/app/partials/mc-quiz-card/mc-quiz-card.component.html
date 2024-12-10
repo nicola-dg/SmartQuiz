@@ -1,0 +1,52 @@
+
+
+<div *ngIf="quiz" class=" flex flex-col flex-grow  min-h-60  max-w-80 min-w-80 p-6 bg-3ary-color bg-opacity-50   border border-gray-200 rounded-lg shadow dark:bg-dark-5ary-color dark:border-dark-3ary-color dark:text-dark-primary-color">
+    <div class="flex flex-grow flex-col gap-2">
+        <div class="flex justify-between items-start">
+            <h5 class="text-2xl font-medium text-gray-900 dark:text-white block text-wrap break-words ">{{quiz.title}}</h5>
+            <div class="flex relative gap-3">
+                <div class="hover:cursor-pointer group  w-full flex flex-col items-center">
+                    <div class="group">
+                        <i class="fa-solid fa-qrcode" (click)="toggleShowQrCode()"></i>
+                        <div *ngIf="showQrCode" class=" absolute  rounded border-2 dark:border-black dark:bg-dark-4ary-color bg-5ary-color right-0 top-5 flex flex-col gap-2 items-center">
+                            <button (click)="toggleShowQrCode()" class="flex-grow w-full text-end pr-3 dark:bg-black dark:bg-opacity-80 bg-3ary-color bg-opacity-50  "><i class="fa-solid fa-xmark hover:scale-110 transition-transform duration-100"></i></button>
+                            <qr-code  id="qrCode" [value]="quiz.link" size="100" errorCorrectionLevel="M" />
+                            
+                            <div class=" dark:bg-dark-4ary-color rounded">
+                                <div class="dark:bg-dark-5ary-color bg-secondary-color bg-opacity-30 rounded shadow-md  flex justify-end gap-3 p-2 box-border m-2 items-center hover:scale-105 transition-transform duration-300" (click)="downloadQRCode()" (click)="toggleShowQrCode()">
+                                    <span>Download</span>
+                                    <button><i class="fa-solid fa-download"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <span class=" block absolute bottom-7 w-auto min-w-16 text-sm text-center hidden dark:bg-dark-4ary-color bg-opacity-30 rounded group-hover:block">get code</span>
+                </div>
+                <div class="hover:cursor-pointer group w-full flex flex-col items-center">
+                    <div >
+                        <i class="fa-solid fa-link" (click)="toggleShowLink()"></i>
+                        <div *ngIf="showLink" class=" absolute border-2 dark:border-black  dark:bg-dark-4ary-color bg-5ary-color rounded top-5 right-1  flex w-auto min-w-full flex-col items-center shadow-lg">
+                            <button (click)="toggleShowLink()" class="flex-grow w-full text-end pr-3 dark:bg-black bg-3ary-color bg-opacity-50"><i class="fa-solid fa-xmark hover:scale-110 transition-transform duration-300"></i></button>
+                            <div class="flex flex-grow min-w-fit  items-center gap-2  p-2">
+                                <input type="text" [value]="quiz.link" disabled class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-64 p-2 dark:bg-dark-3ary-color dark:placeholder-dark-3ary-color  dark:border-gray-600  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" name="link">
+                                <div (click)="onClickGetLink()" (click)="toggleShowLink()"><i class="fa-regular fa-copy hover:scale-110 transition-transform duration-300"></i></div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <span class=" block absolute bottom-7 w-auto min-w-16 text-center hidden text-sm  dark:bg-dark-4ary-color bg-opacity-30 rounded group-hover:block">get link</span>
+                </div>
+            </div>
+        </div>
+        <div class="whitespace-normal break-words">
+            <markdown class="font-normal text-gray-700 dark:text-gray-400" [data]="(quiz.description | slice:0:64) + (quiz.description.length > 64 ? '...' : '') "></markdown>
+        </div>
+    </div>
+        <div class="flex gap-2">
+           <div class="flex-grow">
+             <app-button data="See Details" (click)="onClickSeeDetails()"></app-button>
+           </div>
+            <app-button data="Take Quiz" bgColor="secondary" (click)="onClickTakeQuiz()"></app-button>
+        </div>
+    
+</div>

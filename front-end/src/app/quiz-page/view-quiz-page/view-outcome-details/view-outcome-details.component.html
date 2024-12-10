@@ -1,0 +1,47 @@
+
+
+<div *ngIf="outcome" class="border-t dark:border-t-dark-3ary-color dark:bg-dark-5ary-color bg-4ary-color bg-opacity-60 md:p-5 p-2 rounded-b flex flex-grow flex-col md:flex-row">
+    <div class="flex flex-col w-full gap-3">
+        <ul *ngFor="let question of quiz?.MultiChoiceQuestions; let i = index" class="flex flex-col items-start w-full flex-grow dark:bg-dark-4ary-color dark:bg-opacity-30 rounded bg-4ary-color bg-opacity-50 gap-3 md:pr-4">
+            <li class="font-semibold">{{question.question}}</li>
+            <li class=" md:ml-3 " >
+                <div>
+                    <span class="font-medium tracking-tighter">User answer : </span>
+                    <span [ngClass]="{'text-green-700': outcome.response.selectedMultiChoiceAnswers[i].isCorrect, 'text-red-700': !outcome.response.selectedMultiChoiceAnswers[i].isCorrect}">{{outcome.response.selectedMultiChoiceAnswers[i].answer || "Not answered"}}</span>
+                </div>
+                <!-- This span will show the correct answer if available -->
+                <div *ngIf="!outcome.response.selectedMultiChoiceAnswers[i].isCorrect" class="italic">
+                    <span class="font-medium tracking-tighter">Correct Answer:</span>
+                    <span>
+                        {{ getCorrectMCAnswer(question) }}
+                    </span>
+                </div>
+
+            </li>
+        </ul>
+        
+        <ul *ngFor="let oeQuestion of quiz?.OpenEndedQuestions; let i = index" class="flex flex-col  items-start w-full flex-grow dark:bg-dark-4ary-color  dark:bg-opacity-30 rounded bg-4ary-color bg-opacity-50   gap-3 md:pr-4">
+            <li class="font-semibold">{{oeQuestion.question}}</li>
+            <ul class="md:ml-3">
+                <li>
+                    <span class="font-medium tracking-tighter">
+                    User answer : 
+                    </span >
+                    <span  [ngClass]="{'text-green-700': outcome.response.selectedOpenEndedAnswers[i].isCorrect, 'text-red-700':!outcome.response.selectedOpenEndedAnswers[i].isCorrect  }">{{outcome.response.selectedOpenEndedAnswers[i].answer || "Not answered"}}</span>
+                </li>
+                <div *ngIf="!outcome.response.selectedOpenEndedAnswers[i].isCorrect" class="italic">
+                    <span class="font-medium tracking-tighter">Correct Answer:</span>
+                    <span>
+                        {{ getCorrectOEAnswer(oeQuestion) }}
+                    </span>
+                </div> 
+            </ul>
+        </ul>
+
+        <div class="tracking-wider" (click)="onClickEmitToggle()">
+            <app-button data="close" bgColor="secondary"></app-button>
+        </div>
+    </div>
+
+
+</div>
