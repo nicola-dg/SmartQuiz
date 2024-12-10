@@ -22,8 +22,6 @@ npm install
 npm start
 ```
 
-backend is a rest webserver allows to create update remove and delete
-
 # Frontend Configuration
 
 ---
