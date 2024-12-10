@@ -22,7 +22,7 @@ npm install
 npm start
 ```
 
-backend is a rest webserver allows to create update remove and delete 
+backend is a rest webserver allows to create update remove and delete
 
 # Frontend Configuration
 
@@ -36,7 +36,26 @@ npm install
 npm start
 ```
 
+# Hero Page Screenshot
+
+---
+
 ![Hero Page Screenshot](./screenshots/hero-page.png)
+
+# Profile Page Screenshot
+
+---
+
 ![Profile Page Screenshot](./screenshots/profile-page.png)
+
+# Create Quiz Page Screenshot
+
+---
+
 ![Create Quiz Page Screenshot](./screenshots/create-page.png)
+
+# Take Quiz Page Screenshot
+
+---
+
 ![Take Quiz Page Screenshot](./screenshots/take-page.png)
